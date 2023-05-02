@@ -10,8 +10,7 @@ import { usuarioRota } from './app/routes/usuarioRota.js';
 const app = express();
 app.use(express.json());
 app.use(cors());
-const user = process.env.DB_USER;
-const senha = process.env.DB_PASS;
+
 const porta = process.env.PORT;
 app.use('/api/usuarios', usuarioRota);
 

@@ -9,7 +9,7 @@ export const conectaDatabase = async () => {
         const senha = process.env.DB_PASS;
         const porta = process.env.PORT;
         await mongoose.connect(
-            `mongodb+srv://${user}:${senha}@cluster0.qmltksy.mongodb.net/?retryWrites=true&w=majority`
+            `mongodb://localhost:27017`,
         );
         console.log('Conectado ao banco de dados!');
     } catch (erro) {
