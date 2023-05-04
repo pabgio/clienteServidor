@@ -9,6 +9,7 @@ import { usuarioRota } from './app/routes/usuarioRota.js';
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {console.log(req.path,req.method); next()});
 app.use(cors());
 
 const porta = process.env.PORT;

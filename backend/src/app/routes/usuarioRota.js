@@ -5,5 +5,5 @@ import { listaUsuarios, criaUsuarios, deletaUsuario } from '../controllers/usuar
 export const usuarioRota = Router();
 
 usuarioRota.get("/", listaUsuarios);
-usuarioRota.post("/", criaUsuarios);
+usuarioRota.post("/users", criaUsuarios);
 usuarioRota.delete("/:id", deletaUsuario);

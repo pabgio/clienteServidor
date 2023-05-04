@@ -5,9 +5,9 @@ dotenv.config();
 
 export const conectaDatabase = async () => {
     try {
-        const user = process.env.DB_USER;
-        const senha = process.env.DB_PASS;
-        const porta = process.env.PORT;
+        // const user = process.env.DB_USER;
+        // const senha = process.env.DB_PASS;
+        //const porta = process.env.PORT;
         await mongoose.connect(
             `mongodb://localhost:27017`,
         );
