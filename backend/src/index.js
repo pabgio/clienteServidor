@@ -1,30 +1,29 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
+import express from "express";
+import { userRouter } from "./app/routes/usuarioRota.js";
+import { conectaDatabase } from "./database/database.js";
+
 dotenv.config();
-import express from 'express';
-import cors from "cors";
-import { conectaDatabase } from './database/database.js';
-import { usuarioRota } from './app/routes/usuarioRota.js';
-
-
 
 const app = express();
+
 app.use(express.json());
-app.use((req, res, next) => {console.log(req.path,req.method); next()});
-app.use(cors());
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
 
-const porta = process.env.PORT;
-app.use('/api/usuarios', usuarioRota);
-
+app.use("/users", userRouter);
 
 conectaDatabase()
-.then(() => {
-    app.listen(porta, () => {
-        console.log(`Servidor rodando na porta http://localhost:${porta}`);
-    });
-})
-.catch((erro) => {
-    console.log(erro);
-    console.log('Erro ao conectar-se com o servidor!');
-});
- 
+  .then(() => {
+    const porta = process.env.PORT;
 
+    app.listen(porta, () => {
+      console.log(`🟢 Servidor rodando em http://localhost:${porta}`);
+    });
+  })
+  .catch((erro) => {
+    console.error(erro);
+    console.error("🔴 Erro ao conectar-se ao servidor!");
+  });

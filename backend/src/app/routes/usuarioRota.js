@@ -1,9 +1,24 @@
 import  { Router }  from   'express' ;
 
-import { listaUsuarios, criaUsuarios, deletaUsuario } from '../controllers/usuarioController.js';
+import {
+  loginUser,
+  criaUsuario,
+  getUsers,
+  getUser,
+  deleteUser,
+  updateUser,
+} from "../controllers/usuarioController.js";
 
-export const usuarioRota = Router();
+export const userRouter = Router();
 
-usuarioRota.get("/", listaUsuarios);
-usuarioRota.post("/users", criaUsuarios);
-usuarioRota.delete("/:id", deletaUsuario);
+// Login
+userRouter.post("/login", loginUser);
+
+// Signup
+userRouter.post("/", criaUsuario);
+
+// Others routes
+userRouter.get("/", getUsers);
+userRouter.get("/:id", getUser);
+userRouter.put("/:id", updateUser);
+userRouter.delete("/:id", deleteUser);
