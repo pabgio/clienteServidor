@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import { userRouter } from "./app/routes/usuarioRota.js";
+import { ocorrenciaRouter } from "./app/routes/ocorrenciasRotas.js";
 import { conectaDatabase } from "./database/database.js";
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/users", userRouter);
+app.use("/ocorrencias", ocorrenciaRouter);
 
 conectaDatabase()
   .then(() => {

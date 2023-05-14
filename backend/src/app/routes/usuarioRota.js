@@ -3,6 +3,7 @@ import  { Router }  from   'express' ;
 import {
   loginUser,
   criaUsuario,
+  logoutUser,
   getUsers,
   getUser,
   deleteUser,
@@ -16,6 +17,9 @@ userRouter.post("/login", loginUser);
 
 // Signup
 userRouter.post("/", criaUsuario);
+
+// Logout
+userRouter.post("/logout", logoutUser);
 
 // Others routes
 userRouter.get("/", getUsers);

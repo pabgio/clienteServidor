@@ -1,10 +1,9 @@
-
 import bcrypt from "bcrypt";
 import validator from "validator";
+import jwt from "jsonwebtoken";
 
 import Usuario from "../models/Usuario.js";
 import userSchema from "../models/Usuario.js";
-
 
 export const signup = async function (nome, email, senha)  {
   // Validação
@@ -52,9 +51,22 @@ export const login = async function (email, senha) {
     throw Error("Senha incorreta!");
   }
 
-  return user;
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+
+  return { user, token };
 };
 
+export const logout = async function (req, res) {
+  try {
+    // Invalida o token do usuário no banco de dados
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
 
+    await req.user.save();
 
-
+    res.send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
