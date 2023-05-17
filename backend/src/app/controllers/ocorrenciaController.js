@@ -11,8 +11,7 @@ export const criaOcorrencia = async (req, res) => {
         registro,
         local,
         tipo,
-        km,
-        user_id
+        km
     } = req.body;
 
     try {
@@ -21,13 +20,13 @@ export const criaOcorrencia = async (req, res) => {
             local,
             tipo,
             km,
-            user_id,
+            user_id: req.user._id, // extrai o id do objeto user
         });
 
-        res.status(201).json(ocorrencia);
-    } catch (error) {
+        res.status(201).json("Ocorrência criada com sucesso.");
+    } catch (erro) {
         res.status(400).json({
-            error: error.message
+            erro: "Não foi possível criar a ocorrência."
         });
     }
 };
