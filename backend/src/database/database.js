@@ -9,7 +9,7 @@ export const conectaDatabase = async () => {
         // const senha = process.env.DB_PASS;
         //const porta = process.env.PORT;
         await mongoose.connect(
-            `mongodb://localhost:27017`,
+            `mongodb://root:root@localhost:27017`,
         );
         console.log('Conectado ao banco de dados!');
     } catch (erro) {

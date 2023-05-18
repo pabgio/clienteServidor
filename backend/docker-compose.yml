@@ -2,7 +2,7 @@ version: '4'
 
 services:
  mongodb:
-  container_name: mongodb
+  container_name: mongoProjeto
   image: mongo:latest
   environment:
    - MONGO_INITDB_ROOT_USERNAME=root
