@@ -1,23 +1,17 @@
-import Link from "next/link";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
-import Input from "@/components/form/input";
-import Button from "@/components/form/button";
 import { useSignup } from "@/hooks/useSignup";
 import Error from "@/components/error";
 
 export default function Signup() {
-  const [nome, setNome] = useState("");
+  const [name, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const { signup, error, isLoading } = useSignup();
+  const [password, setSenha] = useState("");
+  const { signup, message, isLoading } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await signup(nome, email, senha);
+    await signup(name, email, password);
   };
 
   return (
@@ -32,6 +26,8 @@ export default function Signup() {
             <input
               type="text"
               id="nome"
+              value={name}
+              placeholder="Digite seu nome"
               className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2"
               onChange={(e) => setNome(e.target.value)}
             />
@@ -41,28 +37,33 @@ export default function Signup() {
             <input
               type="email"
               id="email"
+              value={email}
+              placeholder="Digite seu email"
               className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-600">
-              Password
+              Senha
             </label>
             <input
               type="password"
               id="password"
+              value={password}
+              placeholder="Digite sua senha"
               className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2"
               onChange={(e) => setSenha(e.target.value)}
             />
           </div>
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors"
           >
-            Login
+            Cadastrar
           </button>
-          {error && <Error erroMensagem={error} className="mt-4" />}
+          {message && <Error erroMensagem={message} className="mt-4" />}
         </form>
         <a href="/" className="mt-4 block text-center text-sm font-medium text-gray-700 hover:underline">
           Voltar

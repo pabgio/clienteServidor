@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const userSchema = new mongoose.Schema({
-  nome: {
+  name: {
     type: String,
     required: true,
     minlength: 2,
@@ -15,10 +15,10 @@ const userSchema = new mongoose.Schema({
     minlength: 10,
     maxlength: 125,
   },
-  senha: {
+  password: {
     type: String,
     required: true,
-    minlength: 8,
+    minlength: 2,
     maxWidth: 125,
   },
 });

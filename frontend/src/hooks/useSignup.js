@@ -1,29 +1,36 @@
 import { useState } from "react";
+import md5 from "md5";
 import { useAuthContext } from "./useAuthContext";
+
 import { useRouter } from "next/router";
 
+
 export const useSignup = () => {
-  const [error, setErro] = useState(null);
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [error, setError] = useState(null); 
   const { dispatch } = useAuthContext();
+
   const router = useRouter();
+  // Add setError state
 
-  const signup = async (nome, email, senha) => {
+  const signup = async (name, email, password) => {
     setIsLoading(true);
-    setErro(null);
+    setMessage(null);
 
-    const response = await fetch("http://localhost:23000/users/", {
+    const hashSenha = md5(password);
+
+    const response = await fetch("http://localhost:22000/users/", {
       method: "post",
-      body: JSON.stringify({ nome, email, senha }),
+      body: JSON.stringify({ name, email, password: hashSenha }), // Use name instead of nome
       headers: { "Content-Type": "application/json" },
     });
     const json = await response.json();
 
     if (!response.ok) {
       setIsLoading(false);
-      setErro(json.error);
+      setMessage(json.message);
     }
-
     if (response.ok) {
       localStorage.setItem("user", JSON.stringify(json));
 
@@ -33,5 +40,5 @@ export const useSignup = () => {
     }
   };
 
-  return { signup, isLoading, error };
+  return { signup,isLoading, message }; // Include error in the return object
 };

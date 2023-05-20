@@ -24,7 +24,7 @@ export default function ProfilePage() {
         <div className="bg-gray-800 min-h-screen flex items-center justify-center">
           <div className="card bg-white shadow-lg max-w-md md:w-[100%] w-full max-h-[90vh]">
             <div className="relative h-72">
-              <Image src="/road2.jpg" alt="rua" width={500} height={500} priority />
+              <Image  alt="rua" width={500} height={500} priority />
             </div>
     
             <div className="p-8">

@@ -1,18 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { IconContext } from "react-icons";
 import { FaUser } from "react-icons/fa";
+import { useAuthentication } from "../components/auth.js";
 
 export default function HomePage() {
+  useAuthentication();
   const router = useRouter();
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      router.push("/login");
-    }
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -28,10 +22,10 @@ export default function HomePage() {
             <ul className="flex space-x-4">
               <li>
                 <Link href="/perfil" className="text-white hover:text-gray-300 flex items-center">
-                    <IconContext.Provider value={{ className: "mr-1" }}>
-                      <FaUser />
-                    </IconContext.Provider>
-                    Perfil
+                  <IconContext.Provider value={{ className: "mr-1" }}>
+                    <FaUser />
+                  </IconContext.Provider>
+                  Perfil
                 </Link>
               </li>
               <li>

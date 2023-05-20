@@ -1,27 +1,31 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
+import md5 from "md5";
 
 export const useLogin = () => {
-  const [error, setErro] = useState(null);
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const { dispatch } = useAuthContext();
-  const router = useRouter();
+  const { dispatch } = useAuthContext(); // Updated destructuring
 
-  const login = async (email, senha) => {
+  const router = useRouter(); // Added missing declaration
+
+  const login = async (email, password) => {
     setIsLoading(true);
-    setErro(null);
+    setMessage(null);
+
+    const hashSenha = md5(password);
 
     const response = await fetch("http://localhost:23000/users/login", {
       method: "post",
-      body: JSON.stringify({ email, senha }),
+      body: JSON.stringify({ email, password: hashSenha }),
       headers: { "Content-Type": "application/json" },
     });
     const json = await response.json();
 
     if (!response.ok) {
       setIsLoading(false);
-      setErro(json.error);
+      setMessage(json.message); // Updated variable name
     }
 
     if (response.ok) {
@@ -30,8 +34,11 @@ export const useLogin = () => {
       dispatch({ type: "LOGIN", payload: json });
       setIsLoading(false);
       router.push("home");
+    } else {
+      setIsLoading(false);
+      setMessage(json.message); // Updated variable name
     }
   };
 
-  return { login, isLoading, error };
+  return { login, isLoading, message };
 };
