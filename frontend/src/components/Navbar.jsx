@@ -20,9 +20,9 @@ const Navbar = () => {
       <header className="bg-indigo-600 py-4">
         <div className="container mx-auto flex justify-between items-center px-4">
           <h1 className="text-white text-2xl font-bold">SAOITR</h1>
-          <nav>
+          <nav className="bg-indigo-600">
             <ul className="flex space-x-4">
-              <li>
+              <li >
                 <Link href="/perfil" className="text-white hover:text-gray-300 flex items-center">
                   <IconContext.Provider value={{ className: "mr-1" }}>
                     <FaUser />
