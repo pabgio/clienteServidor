@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
+import { apiUrl } from "./config.js";
 
 export const usePerfil = () => {
     const [error, setErro] = useState(null);
@@ -12,7 +13,7 @@ export const usePerfil = () => {
         setIsLoading(true);
         setErro(null);
     
-        const response = await fetch(`http://localhost:23000/users/${id}`, {
+        const response = await fetch(`${apiUrl}/users/${id}`, {
         method: "get",
         body: JSON.stringify({ email, senha }),
         headers: { "Content-Type": "application/json" },

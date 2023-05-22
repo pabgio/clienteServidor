@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
 import md5 from "md5";
+import { apiUrl } from "./config.js";
 
 export const useLogin = () => {
   const [message, setMessage] = useState(null);
@@ -16,7 +17,7 @@ export const useLogin = () => {
 
     const hashSenha = md5(password);
 
-    const response = await fetch("http://localhost:23000/users/login", {
+    const response = await fetch(`${apiUrl}/users/login`, {
       method: "post",
       body: JSON.stringify({ email, password: hashSenha }),
       headers: { "Content-Type": "application/json" },

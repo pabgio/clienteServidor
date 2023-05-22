@@ -1,6 +1,7 @@
 import { useState } from "react";
 import md5 from "md5";
 import { useAuthContext } from "./useAuthContext";
+import { apiUrl } from "./config.js";
 
 import { useRouter } from "next/router";
 
@@ -8,8 +9,8 @@ import { useRouter } from "next/router";
 export const useSignup = () => {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const [error, setError] = useState(null); 
   const { dispatch } = useAuthContext();
+ 
 
   const router = useRouter();
   // Add setError state
@@ -20,7 +21,7 @@ export const useSignup = () => {
 
     const hashSenha = md5(password);
 
-    const response = await fetch("http://localhost:22000/users/", {
+    const response = await fetch(`${apiUrl}/users/`, {
       method: "post",
       body: JSON.stringify({ name, email, password: hashSenha }), // Use name instead of nome
       headers: { "Content-Type": "application/json" },

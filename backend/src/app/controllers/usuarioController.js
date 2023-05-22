@@ -1,15 +1,7 @@
-
-import * as dotenv from "dotenv";
 import Usuario from "../models/Usuario.js";
-import jwt from "jsonwebtoken";
 import validator from "validator";
-
-
-dotenv.config();
-
-const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "3d" });
-};
+import mongoose from "mongoose";
+import { createToken } from "./auth.js";
 
 // Login
 export const loginUser = async (req, res) => {

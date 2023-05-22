@@ -1,8 +1,12 @@
 import { useState } from "react";;
 import { useLogin } from "@/hooks/useLogin";
 import Error from "@/components/error";
+import Home from ".";
+import Signup from "./signup";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const router = useRouter();
   
   const [mail, setEmail] = useState("");
   const [password, setSenha] = useState("");
@@ -12,6 +16,16 @@ export default function Login() {
     e.preventDefault();
 
     await login(mail, password);
+  };
+
+  const handleHomeSemConta = async (e) => {
+    e.preventDefault();
+    router.push("/homeSemLogin");
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    router.push("/signup");
   };
 
   return (
@@ -49,11 +63,28 @@ export default function Login() {
           >
             Login
           </button>
-          {message && <Error erroMensagem={message} className="mt-4" />}
+
         </form>
-        <a href="/signup" className="mt-4 block text-center text-sm font-medium text-gray-700 hover:underline">
+        
+        <button
+          onClick={handleHomeSemConta}
+          className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors mt-2" disabled={isLoading}
+      
+        >
+          Entrar sem conta
+        </button>
+       
+
+        <button
+          onClick={handleSignup}
+          className="w-full bg-indigo-500 text-white py-2 px-3 rounded-md hover:bg-indigo-600 transition-colors mt-2" disabled={isLoading} 
+          
+      
+        >
           Não tem uma conta? Crie uma agora mesmo!
-        </a>
+        </button>
+        {message && <Error erroMensagem={message} className="mt-4" />}
+
       </div>
     </div>
   );
