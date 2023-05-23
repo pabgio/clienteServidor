@@ -2,6 +2,7 @@ import Usuario from "../models/Usuario.js";
 import validator from "validator";
 import mongoose from "mongoose";
 import { createToken } from "./auth.js";
+import { addInvalidToken } from "./tokenBlacklist.js"; 
 
 // Login
 export const loginUser = async (req, res) => {
@@ -24,7 +25,7 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Credenciais inválidas!" });
     }
 
-    const token = createToken(user._id);
+    const token = createToken(user.customId); // Use o customId para criar o token
 
     return res.status(200).json({
       _id: user._id,
@@ -70,6 +71,7 @@ export const criaUsuario = async (req, res) => {
       name,
       email,
       password,
+      customId: Math.floor(Math.random() * 1000), // Gere um customId aleatório
     });
 
     return res
@@ -84,13 +86,15 @@ export const criaUsuario = async (req, res) => {
 export const logoutUser = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    await logout(token);
+
+    // Adicione o token à lista negra (por exemplo, em um banco de dados ou cache)
+    await addInvalidToken(token);
+
     res.status(200).json({ message: "Logout realizado com sucesso" });
-  } catch (erro) {
-    res.status(400).json({ message: erro.message });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
-
 // Get All
 export const getUsers = async (req, res) => {
   const usuarios = await Usuario.find({}).sort({ createdAt: -1 });

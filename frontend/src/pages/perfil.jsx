@@ -1,55 +1,67 @@
-import React from "react";
-import Link from "next/link";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
-import Input from "@/components/form/input";
-import Button from "@/components/form/button";
-import { useLogin } from "@/hooks/useLogin";
-import Error from "@/components/error";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useRouter } from "next/router";
+import Navbar from "../components/Navbar.jsx";
 
-export default function ProfilePage() {
-    const [email, getEmail] = useState("");
-    const [nome, setNome] = useState("");
-    const { login, error, isLoading } = useLogin();
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        await login(email, senha);
+const Perfil = () => {
+  const [user, setUser] = useState(null);
+  const { state } = useAuthContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+    } else {
+      router.push("/login");
     }
-    
-    return (
-        <div className="bg-gray-800 min-h-screen flex items-center justify-center">
-          <div className="card bg-white shadow-lg max-w-md md:w-[100%] w-full max-h-[90vh]">
-            <div className="relative h-72">
-              <Image  alt="rua" width={500} height={500} priority />
-            </div>
-    
-            <div className="p-8">
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-center text-gray-800">
-                Perfil
-              </h3>
-    
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700">Nome:</label>
-                <span className="text-gray-900">{nome}</span>
-              </div>
-    
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700">Email:</label>
-                <span className="text-gray-900">{email}</span>
-              </div>
-    
-              <div className="flex justify-center">
-                <Link href="/alterar-usuario" className="text-blue-500 hover:text-blue-700">
-                  Alterar Usuário
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+  }, []);
+
+  if (!user) {
+    return null;
   }
-  
+
+  return (
+    <div>
+      <Navbar />
+      <div className="mt-0 min-h-screen flex  justify-center bg-gray-100">
+        <div className="mt-10 max-w-md w-full max-h-[300px] p-6 bg-white bg-opacity-70 rounded shadow">
+          <h1 className="text-2xl font-semibold mb-4 text-center">Perfil</h1>
+          <div className="mb-4">
+            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-600">
+              Nome
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={user.name}
+              readOnly
+              className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-600">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={user.email}
+              readOnly
+              className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
+            />
+          </div>
+          <button
+            onClick={() => router.push("/editar-perfil")}
+            className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors"
+          >
+            Editar Perfil
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Perfil;
