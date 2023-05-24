@@ -11,3 +11,14 @@ Projeto desenvolvido para a disciplina de cliente-servidor, com o objetivo de cr
 3. Na pasta `backend`, crie o arquivo `.env` e adicione as variáveis de ambiente de acordo com o arquivo `.env.example`.
 4. Na pasta `backend`, execute o comando `npm run dev` para iniciar o servidor.
 5. Na pasta `frontend`, execute o comando `npm run dev` para iniciar o front.
+
+## Requisitos
+Node versão 16.6.0 ou superior.
+
+## Tecnologias utilizadas
+- Node.js
+- Express
+- MongoDB
+- React
+- Next.js
+
