@@ -1,18 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSignup } from "@/hooks/useSignup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Error from "@/components/error";
 
 export default function Signup() {
   const [name, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setSenha] = useState("");
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const { signup, message, isLoading } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!name || !email || !password) {
+      toast.error("Por favor, preencha todos os campos.", {
+        position: toast.POSITION.TOP_CENTER
+      });
+      return;
+    }
+
     await signup(name, email, password);
+    setIsSignupSuccess(true);
   };
+
+  useEffect(() => {
+    if (isSignupSuccess) {
+      toast.success("Cadastro realizado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER
+      });
+    } else if (message) {
+      toast.error(message, {
+        position: toast.POSITION.TOP_CENTER
+      });
+    }
+  }, [isSignupSuccess, message]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/road.jpg)]">
@@ -68,8 +91,8 @@ export default function Signup() {
         <a href="/" className="mt-4 block text-center text-sm font-medium text-gray-700 hover:underline">
           Voltar
         </a>
+        
       </div>
     </div>
   );
-
 }

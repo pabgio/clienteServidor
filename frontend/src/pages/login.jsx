@@ -1,5 +1,7 @@
-import { useState } from "react";;
+import { useState, useEffect } from "react";
 import { useLogin } from "@/hooks/useLogin";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Error from "@/components/error";
 import Home from ".";
 import Signup from "./signup";
@@ -10,6 +12,7 @@ export default function Login() {
   
   const [mail, setEmail] = useState("");
   const [password, setSenha] = useState("");
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const { login, message, isLoading } = useLogin();
 
   const handleSubmit = async (e) => {
@@ -27,6 +30,18 @@ export default function Login() {
     e.preventDefault();
     router.push("/signup");
   };
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      toast.success("Login realizado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER
+      });
+    } else if (message) {
+      toast.error(message, {
+        position: toast.POSITION.TOP_CENTER
+      });
+    }
+  }, [isLoginSuccess, message]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/road.jpg)]">
@@ -63,28 +78,21 @@ export default function Login() {
           >
             Login
           </button>
-
         </form>
         
         <button
           onClick={handleHomeSemConta}
           className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors mt-2" disabled={isLoading}
-      
         >
           Entrar sem conta
         </button>
        
-
         <button
           onClick={handleSignup}
           className="w-full bg-indigo-500 text-white py-2 px-3 rounded-md hover:bg-indigo-600 transition-colors mt-2" disabled={isLoading} 
-          
-      
         >
           Não tem uma conta? Crie uma agora mesmo!
         </button>
-        {message && <Error erroMensagem={message} className="mt-4" />}
-
       </div>
     </div>
   );

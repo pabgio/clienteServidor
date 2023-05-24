@@ -7,7 +7,8 @@ import { useLogout } from "@/hooks/useLogout";
 
 const Navbar = () => {
   const router = useRouter();
-  const { logout } = useLogout(); // Obtenha a função logout do hook useLogout
+  const { logout } = useLogout();
+  const {message} = useLogout();
 
   const handleLogout = async () => {
     await logout(); // Chame a função logout ao fazer logout
@@ -34,6 +35,8 @@ const Navbar = () => {
                 <button onClick={handleLogout} className="text-white hover:text-gray-300">
                   Logout
                 </button>
+                {message && <Error erroMensagem={message} className="mt-4" />}
+
               </li>
             </ul>
           </nav>

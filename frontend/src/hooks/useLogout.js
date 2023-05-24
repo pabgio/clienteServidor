@@ -1,26 +1,36 @@
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
 import { apiUrl } from "./config";
+import { useState } from "react";
 
 export const useLogout = () => {
   const { dispatch } = useAuthContext();
   const router = useRouter();
+  const [message, setMessage] = useState(null);
 
   const logout = async () => {
+    setMessage(null);
+
     try {
-      const token = localStorage.getItem("user")?.token;
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user?.token;
+      const userId = user?.id;
 
       if (token) {
-        await fetch(`${apiUrl}/users/logout`, {
+        const response = await fetch(`${apiUrl}/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ userId }), // Enviar o userId no corpo da requisição
         });
+
+        const json = await response.json();
+        setMessage(json.message);
       }
     } catch (error) {
-      console.error("Erro ao fazer logout:", error);
+      setMessage("Erro ao efetuar logout");
     }
 
     localStorage.removeItem("user");
@@ -28,5 +38,5 @@ export const useLogout = () => {
     router.push("/login");
   };
 
-  return { logout };
+  return { logout, message };
 };
