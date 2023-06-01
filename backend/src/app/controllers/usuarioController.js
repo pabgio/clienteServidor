@@ -30,11 +30,11 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Credenciais inválidas!" });
     }
 
-    const token = createToken(user.customId); // Use o customId para criar o token
+    const token = createToken(user._id); // Use o customId para criar o token
 
     console.log("Login realizado com sucesso");
     return res.status(200).json({
-      id: user._id,
+      id: user.customId,
       name: user.name,
       email: user.email,
       token,
@@ -91,7 +91,7 @@ export const criaUsuario = async (req, res) => {
     console.log("Usuário criado com sucesso");
     return res
       .status(201)
-      .json({ id: user._id, name: user.name, email: user.email });
+      .json({ id: user.customId, name: user.name, email: user.email });
   } catch (erro) {
     console.log("Erro no servidor!");
     return res.status(500).json({ message: "Erro no servidor!" });
@@ -130,16 +130,17 @@ export const getUsers = async (req, res) => {
 };
 
 // Get One
+// Get One
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("Nenhum usuário encontrado!");
-      return res.status(400).json({ message: "Nenhum usuário encontrado!" });
+      console.log("ID de usuário inválido!");
+      return res.status(400).json({ message: "ID de usuário inválido!" });
     }
 
-    const usuario = await Usuario.findById(id);
+    const usuario = await Usuario.findOne({ customId: id });
 
     if (!usuario) {
       console.log("Nenhum usuário encontrado!");
@@ -147,7 +148,7 @@ export const getUser = async (req, res) => {
     }
 
     console.log("Usuário encontrado com sucesso");
-    res.status(200).json({ message: "Usuário encontrado com sucesso" });
+    res.status(200).json(usuario);
   } catch (error) {
     console.log("Erro no servidor!");
     res.status(500).json({ message: "Erro no servidor!" });
@@ -160,11 +161,11 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("Nenhum usuário encontrado!");
-      return res.status(400).json({ message: "Nenhum usuário encontrado!" });
+      console.log("ID de usuário inválido!");
+      return res.status(400).json({ message: "ID de usuário inválido!" });
     }
 
-    const usuario = await Usuario.findOneAndDelete({ id: id });
+    const usuario = await Usuario.findOneAndDelete({ customId: id });
 
     if (!usuario) {
       console.log("Nenhum usuário encontrado!");
@@ -184,22 +185,42 @@ export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("Nenhum usuário encontrado!");
-      return res.status(400).json({ message: "Nenhum usuário encontrado!" });
-    }
-
-    const usuario = await Usuario.findOneAndUpdate({ id: id }, { ...req.body });
+    const usuario = await Usuario.findOne({ customId: id });
 
     if (!usuario) {
-      console.log("Nenhum usuário encontrado!");
-      return res.status(400).json({ message: "Nenhum usuário encontrado!" });
+      console.log('Nenhum usuário encontrado!');
+      return res.status(400).json({ message: 'Nenhum usuário encontrado!' });
     }
 
-    console.log("Usuário alterado com sucesso");
-    res.status(200).json({ message: "Usuário alterado com sucesso" });
+    const { email, senha } = req.body;
+
+    if (senha) {
+      // Verifique a senha atual do usuário
+      if (md5(senha) !== usuario.password) {
+        console.log('Senha atual inválida!');
+        return res.status(400).json({ message: 'Senha atual inválida!' });
+      }
+    }
+
+    // Faça as alterações no objeto usuario
+    if (email) {
+      usuario.email = email;
+    }
+
+    // Se uma nova senha foi fornecida e é diferente da senha atual, atualize a senha do usuário
+    if (senha && md5(senha) !== usuario.password) {
+      usuario.senha = md5(senha);
+    }
+
+    // Salve as alterações no banco de dados
+    const usuarioAtualizado = await usuario.save();
+
+    console.log('Usuário alterado com sucesso', usuarioAtualizado);
+    res.status(200).json({ message: 'Usuário alterado com sucesso' });
   } catch (error) {
-    console.log("Erro no servidor!");
-    res.status(500).json({ message: "Erro no servidor!" });
+    console.log('Erro no servidor!');
+    res.status(500).json({ message: 'Erro no servidor!' });
   }
 };
+
+

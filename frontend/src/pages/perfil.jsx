@@ -21,6 +21,10 @@ const Perfil = () => {
   if (!user) {
     return null;
   }
+  const handleAlteraPerfil = async (e) => {
+    e.preventDefault();
+    router.push("/alteraPerfil");
+  };
 
   return (
     <div>
@@ -53,7 +57,7 @@ const Perfil = () => {
             />
           </div>
           <button
-            onClick={() => router.push("/editar-perfil")}
+            onClick={handleAlteraPerfil}
             className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors"
           >
             Editar Perfil
