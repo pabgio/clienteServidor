@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", userRouter);
-app.use("/ocorrencias", ocorrenciaRouter);
+app.use("/occurences", ocorrenciaRouter);
 
 conectaDatabase()
   .then(() => {

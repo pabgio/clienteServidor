@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar.jsx";
+import { useDeletarUsuario } from "../hooks/useDeletarUsuario.js";
 
 const Perfil = () => {
   const [user, setUser] = useState(null);
   const { state } = useAuthContext();
   const router = useRouter();
+  const { deletarUsuario, isLoading, error } = useDeletarUsuario();
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -21,9 +23,19 @@ const Perfil = () => {
   if (!user) {
     return null;
   }
+
   const handleAlteraPerfil = async (e) => {
     e.preventDefault();
     router.push("/alteraPerfil");
+  };
+
+  const handleDeletarUsuario = async (e) => {
+    e.preventDefault();
+    const confirmDeletion = confirm("Tem certeza que deseja deletar o usuário?");
+    if (confirmDeletion) {
+      await deletarUsuario(user.id);
+      router.push("/login");
+    }
   };
 
   return (
@@ -56,12 +68,20 @@ const Perfil = () => {
               className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
             />
           </div>
-          <button
-            onClick={handleAlteraPerfil}
-            className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors"
-          >
-            Editar Perfil
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={handleAlteraPerfil}
+              className="flex-1 bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition-colors"
+            >
+              Editar Perfil
+            </button>
+            <button
+              onClick={handleDeletarUsuario}
+              className="flex-1 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
+            >
+              Deletar Usuário
+            </button>
+          </div>
         </div>
       </div>
     </div>

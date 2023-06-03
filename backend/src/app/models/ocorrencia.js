@@ -2,13 +2,16 @@ import mongoose from "mongoose";
 import Usuario from "./Usuario.js";
 
 const ocorrenciaSchema = new mongoose.Schema({
-    tipo: {
-        type: String,
+    ocorrenciaId: {
+        type: Number,
         required: true,
-        minlength: 2,
-        maxlength: 125,
+        unique: true
     },
-    registro: {
+    ocurrence_type: {
+        type: Number,
+        required: true,
+    },
+    registered_at: {
         type: String,
         required: true,
         minlength: 2,
@@ -20,13 +23,30 @@ const ocorrenciaSchema = new mongoose.Schema({
         minlength: 1,
         maxlength: 125,
     },
-    usuario_id: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: Usuario,
+    usuario_customId: {
+        type: Number,
         required: true,
-        minlength: 1,
+       
+    },
+    local: {
+        type: String,
+        required: true,
+        minlength: 2,
         maxlength: 125,
     },
+});
+
+// Pré-hook para buscar o usuário pelo customId antes de salvar uma ocorrência
+ocorrenciaSchema.pre("save", async function (next) {
+    try {
+        const usuario = await Usuario.findOne({ customId: usuario_customId });
+        if (!usuario) {
+            throw new Error("Usuário não encontrado");
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
 export default mongoose.model("Ocorrencia", ocorrenciaSchema);

@@ -181,22 +181,27 @@ export const deleteUser = async (req, res) => {
 };
 
 // Update
+
+
+
 export const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
+    console.log(id);
 
     const usuario = await Usuario.findOne({ customId: id });
+    console.log(usuario);
 
     if (!usuario) {
       console.log('Nenhum usuário encontrado!');
       return res.status(400).json({ message: 'Nenhum usuário encontrado!' });
     }
 
-    const { email, senha } = req.body;
+    const { email, password, novaSenha } = req.body;
 
-    if (senha) {
+    if (password) {
       // Verifique a senha atual do usuário
-      if (md5(senha) !== usuario.password) {
+      if (password !== usuario.password) {
         console.log('Senha atual inválida!');
         return res.status(400).json({ message: 'Senha atual inválida!' });
       }
@@ -208,12 +213,12 @@ export const updateUser = async (req, res) => {
     }
 
     // Se uma nova senha foi fornecida e é diferente da senha atual, atualize a senha do usuário
-    if (senha && md5(senha) !== usuario.password) {
-      usuario.senha = md5(senha);
+    if (novaSenha && novaSenha !== usuario.password) {
+      usuario.password = novaSenha;
     }
 
     // Salve as alterações no banco de dados
-    const usuarioAtualizado = await usuario.save();
+    const usuarioAtualizado = await usuario.updateOne();
 
     console.log('Usuário alterado com sucesso', usuarioAtualizado);
     res.status(200).json({ message: 'Usuário alterado com sucesso' });
@@ -222,5 +227,3 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: 'Erro no servidor!' });
   }
 };
-
-
