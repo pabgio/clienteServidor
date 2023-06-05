@@ -187,43 +187,58 @@ export const deleteUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    const { name, email, password } = req.body;
+    const token = req.headers.authorization;
 
-    const usuario = await Usuario.findOne({ customId: id });
-    console.log(usuario);
-
-    if (!usuario) {
-      console.log('Nenhum usuário encontrado!');
-      return res.status(400).json({ message: 'Nenhum usuário encontrado!' });
+    if (!token) {
+      return res.status(401).json({ message: "Token não informado!" });
     }
 
-    const { email, password, novaSenha } = req.body;
+    const existingToken = await InvalidToken.findOne({ token });
 
-    if (password) {
-      // Verifique a senha atual do usuário
-      if (password !== usuario.password) {
-        console.log('Senha atual inválida!');
-        return res.status(400).json({ message: 'Senha atual inválida!' });
+    if (existingToken) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    const user = await Usuario.findOne({ customId: id });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    if (email !== user.email) {
+      const exists = await Usuario.findOne({ email });
+
+      if (exists) {
+        return res
+          .status(422)
+          .json({ message: "Este email já está sendo utilizado!" });
       }
     }
 
-    // Faça as alterações no objeto usuario
-    if (email) {
-      usuario.email = email;
+    if (password.trim()) {
+      if (password.trim().length < 2) {
+        return res
+          .status(400)
+          .json({ message: "A senha não é forte o suficiente!" });
+      }
     }
 
-    // Se uma nova senha foi fornecida e é diferente da senha atual, atualize a senha do usuário
-    if (novaSenha && novaSenha !== usuario.password) {
-      usuario.password = novaSenha;
+    if (!password.trim()) {
+      await Usuario.findOneAndUpdate({ customId: id }, { name, email });
+    } else {
+      await Usuario.findOneAndUpdate(
+        { customId: id },
+        { name, email, password }
+      );
     }
 
-    // Salve as alterações no banco de dados
-    const usuarioAtualizado = await usuario.updateOne();
-
-    console.log('Usuário alterado com sucesso', usuarioAtualizado);
-    res.status(200).json({ message: 'Usuário alterado com sucesso' });
-  } catch (error) {
-    console.log('Erro no servidor!');
-    res.status(500).json({ message: 'Erro no servidor!' });
+    return res
+      .status(200)
+      .json({ id: user.customId, name: user.name, email: user.email });
+  } catch (erro) {
+    console.log(erro);
+    return res.status(500).json({ message: "Erro no servidor!" });
   }
 };
+
