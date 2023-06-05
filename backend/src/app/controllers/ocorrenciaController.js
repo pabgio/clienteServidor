@@ -9,7 +9,7 @@ export const cadastrarOcorrencia = async (req, res, token) => {
     console.log(ocurrence_type, registered_at, km, local, usuario_customId, token);
 
     console.log(
-      `Registered At -> ${registered_at} | Local -> ${local} | Occurrence Type -> ${ocurrence_type} | Km -> ${km} | User Id -> ${usuario_customId}`
+      `Registered At -> ${registered_at} | Local -> ${local} | Ocurrence Type -> ${ocurrence_type} | Km -> ${km} | User Id -> ${usuario_customId}`
     );
 
     if (!token) {
@@ -34,7 +34,7 @@ export const cadastrarOcorrencia = async (req, res, token) => {
     const occurrence = await Ocorrencia.create({
       registered_at,
       local,
-      occurrence_type: ocurrence_type,
+      ocurrence_type: ocurrence_type,
       km,
       usuario_customId,
     });
@@ -43,7 +43,7 @@ export const cadastrarOcorrencia = async (req, res, token) => {
       occurrence: occurrence.id,
       registered_at: occurrence.registered_at,
       local: occurrence.local,
-      ocurrence_type: occurrence.occurrence_type,
+      ocurrence_type: occurrence.ocurrence_type,
       km: occurrence.km,
       token: token,
       usuario_customId: occurrence.usuario_customId,
