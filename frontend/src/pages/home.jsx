@@ -1,4 +1,4 @@
-import { baseUrl } from "@/api/baseUrl";
+import { apiUrl } from "./config.js";
 import Navbar from "@/components/navbar";
 import OccurrenceForm from "@/components/occurrenceForm/occurrenceForm";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchOccurrences = async () => {
-      const response = await fetch(`${baseUrl}/occurrences`);
+      const response = await fetch(`${apiUrl}/occurrences`);
       const json = await response.json();
       console.log(json);
 
