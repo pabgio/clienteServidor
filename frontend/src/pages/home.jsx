@@ -1,6 +1,6 @@
 import { apiUrl } from "./config.js";
 import Navbar from "@/components/navbar";
-import OccurrenceForm from "@/components/occurrenceForm/occurrenceForm";
+import OccurrenceForm from "@/components/form/occurrenceForm";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { format } from "date-fns";
