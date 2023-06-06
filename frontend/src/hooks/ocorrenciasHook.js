@@ -24,7 +24,7 @@ export const useOcorrencias = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(ocorrenciaData, userId ),
+        body: JSON.stringify(ocorrenciaData, `${userId}` ),
       });
 
       const data = await response.json();

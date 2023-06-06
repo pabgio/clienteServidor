@@ -194,12 +194,8 @@ export const updateUser = async (req, res) => {
       return res.status(401).json({ message: "Token não informado!" });
     }
 
-    const existingToken = await InvalidToken.findOne({ token });
 
-    if (existingToken) {
-      return res.status(401).json({ message: "Token inválido" });
-    }
-
+   
     const user = await Usuario.findOne({ customId: id });
 
     if (!user) {
@@ -215,16 +211,16 @@ export const updateUser = async (req, res) => {
           .json({ message: "Este email já está sendo utilizado!" });
       }
     }
-
-    if (password.trim()) {
-      if (password.trim().length < 2) {
+if (password) {
+      if (password.length < 2) {
         return res
           .status(400)
-          .json({ message: "A senha não é forte o suficiente!" });
+         
+     .json({ message: "A senha não é forte o suficiente!" });
       }
     }
 
-    if (!password.trim()) {
+    if (!password) {
       await Usuario.findOneAndUpdate({ customId: id }, { name, email });
     } else {
       await Usuario.findOneAndUpdate(
