@@ -2,7 +2,7 @@ import Usuario from "../models/Usuario.js";
 import validator from "validator";
 import mongoose from "mongoose";
 import { createToken } from "./auth.js";
-import { addInvalidToken } from "./tokenBlacklist.js";
+import  InvalidToken  from "../models/InvalidToken.js";
 
 // Login
 export const loginUser = async (req, res) => {
@@ -30,11 +30,11 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Credenciais inválidas!" });
     }
 
-    const token = createToken(user._id); // Use o customId para criar o token
+    const token = createToken(user._id); // Use o _id para criar o token
 
     console.log("Login realizado com sucesso");
     return res.status(200).json({
-      id: user.customId,
+      id: user._id,
       name: user.name,
       email: user.email,
       token,
@@ -85,13 +85,13 @@ export const criaUsuario = async (req, res) => {
       name,
       email,
       password,
-      customId: Math.floor(Math.random() * 1000), // Gere um customId aleatório
+      
     });
     console.log(user);
     console.log("Usuário criado com sucesso");
     return res
       .status(201)
-      .json({ id: user.customId, name: user.name, email: user.email });
+      .json({ id: user._id, name: user.name, email: user.email });
   } catch (erro) {
     console.log("Erro no servidor!");
     return res.status(500).json({ message: "Erro no servidor!" });
@@ -105,7 +105,7 @@ export const logoutUser = async (req, res) => {
     console.log(token);
 
     // Adicione o token à lista negra (por exemplo, em um banco de dados ou cache)
-    await addInvalidToken(token);
+    await InvalidToken(token);
 
     console.log("Logout realizado com sucesso");
     res.status(200).json({ message: "Logout realizado com sucesso" });
@@ -131,29 +131,6 @@ export const getUsers = async (req, res) => {
 
 // Get One
 // Get One
-export const getUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("ID de usuário inválido!");
-      return res.status(400).json({ message: "ID de usuário inválido!" });
-    }
-
-    const usuario = await Usuario.findOne({ customId: id });
-
-    if (!usuario) {
-      console.log("Nenhum usuário encontrado!");
-      return res.status(400).json({ message: "Nenhum usuário encontrado!" });
-    }
-
-    console.log("Usuário encontrado com sucesso");
-    res.status(200).json(usuario);
-  } catch (error) {
-    console.log("Erro no servidor!");
-    res.status(500).json({ message: "Erro no servidor!" });
-  }
-};
 
 // Delete
 export const deleteUser = async (req, res) => {
@@ -165,7 +142,7 @@ export const deleteUser = async (req, res) => {
       return res.status(400).json({ message: "ID de usuário inválido!" });
     }
 
-    const usuario = await Usuario.findOneAndDelete({ customId: id });
+    const usuario = await Usuario.findOneAndDelete({ _id: id });
 
     if (!usuario) {
       console.log("Nenhum usuário encontrado!");
@@ -190,13 +167,22 @@ export const updateUser = async (req, res) => {
     const { name, email, password } = req.body;
     const token = req.headers.authorization;
 
+    console.log(
+      `Id -> ${id} | Name -> ${name} | Email -> ${email} | Password -> ${password} | Token -> ${token}`
+    );
     if (!token) {
       return res.status(401).json({ message: "Token não informado!" });
     }
 
+    const existingToken = await InvalidToken.findOne({ token });
+    if (existingToken) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
 
    
-    const user = await Usuario.findOne({ customId: id });
+    const user = await Usuario.findOne({ _id: id });
+
+    console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: "Usuário não encontrado" });
@@ -220,21 +206,23 @@ if (password) {
       }
     }
 
-    if (!password) {
-      await Usuario.findOneAndUpdate({ customId: id }, { name, email });
-    } else {
-      await Usuario.findOneAndUpdate(
-        { customId: id },
-        { name, email, password }
-      );
-    }
+    const updateUser= {name,email}
 
-    return res
-      .status(200)
-      .json({ id: user.customId, name: user.name, email: user.email });
-  } catch (erro) {
-    console.log(erro);
-    return res.status(500).json({ message: "Erro no servidor!" });
+   if (password != nul){
+
+    updateUser.password = password;
+
+   }
+   await Usuario.findOneAndUpdate({ _id: id }, updateUser);
+
+    console.log("Usuário atualizado com sucesso");
+
+    return res.status(200).json({ id: user._id, name: user.name, email: user.email });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ message: error.message });
   }
+  
+
 };
 

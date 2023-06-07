@@ -2,8 +2,8 @@ import  { Router }  from   'express' ;
 
 import {
     cadastrarOcorrencia,
-    getOcorrencias,
-    getOcorrencia,
+    getOccurrences,
+    
     updateOcorrencia,
     deletaOcorrencia,
 
@@ -12,16 +12,12 @@ import {
 export const ocorrenciaRouter = Router();
 
 // Cria uma nova ocorrência
-ocorrenciaRouter.post("/", (req, res) => {
-    // Obtenha o token do cabeçalho da requisição
-    const token = req.headers.authorization;
-    cadastrarOcorrencia(req, res, token);
-  });
+ocorrenciaRouter.post("/", cadastrarOcorrencia);
 // Retorna todas as ocorrências
-ocorrenciaRouter.get("/", getOcorrencias);
+ocorrenciaRouter.get("/", getOccurrences);
 
 // Retorna uma ocorrência específica
-ocorrenciaRouter.get("/:id", getOcorrencia);
+
 
 // Atualiza uma ocorrência específica
 ocorrenciaRouter.put("/:id", updateOcorrencia);

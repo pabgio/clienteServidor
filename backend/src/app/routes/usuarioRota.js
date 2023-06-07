@@ -5,7 +5,7 @@ import {
   criaUsuario,
   logoutUser,
   getUsers,
-  getUser,
+  
   deleteUser,
   updateUser,
 } from "../controllers/usuarioController.js";
@@ -23,6 +23,6 @@ userRouter.post("/logout", logoutUser);
 
 // Others routes
 userRouter.get("/", getUsers);
-userRouter.get("/:id", getUser);
-userRouter.put("/users/:id", updateUser);
+
+userRouter.put("/:id", updateUser);
 userRouter.delete("/:id", deleteUser);

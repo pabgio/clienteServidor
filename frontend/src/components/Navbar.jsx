@@ -21,13 +21,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-gray-800">
-        <div className="px-2 sm:px-6 lg:px-9">
+      <nav className="bg-indigo-600">
+        <div className="px-2 sm:px-6 lg:px-9 items-center">
           <div className="relative flex h-16 items-center justify-between">
-            <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
+            <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
               <div className="flex flex-shrink-0 items-center">
                 <Link href="/home" className="text-2xl font-bold text-white">
-                  <span className="text-cyan-500">SAO</span>ITR
+                  <span className="text-cyan-500">SAO</span>ITR 
                 </Link>
               </div>
             </div>
@@ -35,8 +35,8 @@ export default function Navbar() {
             <div className="hidden md:block">
               {user && (
                 <p className="text-sm font-medium text-gray-300">
-                  <a href="/usuario">
-                    Bem-vindo{" "}
+                  <a href="/perfil">
+                     Bem-vindo {" "}
                     <span className="text-cyan-500">{user.email}</span>
                   </a>
                 </p>
@@ -46,7 +46,7 @@ export default function Navbar() {
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:hidden">
               {user && (
                 <div className="mr-4">
-                  <a href="/usuario">
+                  <a href="/perfil">
                     <BiUserCircle className="h-6 w-6 text-cyan-500" />
                   </a>
                 </div>
@@ -101,7 +101,7 @@ export default function Navbar() {
               {user ? (
                 <Link
                   href="/"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white text-right"
                   onClick={handleClick}
                 >
                   Logout

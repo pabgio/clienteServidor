@@ -23,7 +23,7 @@ export default function Login() {
 
   const handleHomeSemConta = async (e) => {
     e.preventDefault();
-    router.push("/homeSemLogin");
+    router.push("/home");
   };
 
   const handleSignup = async (e) => {
@@ -45,7 +45,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/road.jpg)]">
-      <div className="max-w-md w-full p-6 bg-white bg-opacity-70 rounded shadow">
+      <div className="max-w-md w-full p-6 bg-white rounded shadow">
         <h1 className="text-2xl font-semibold mb-4 text-center">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

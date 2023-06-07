@@ -1,4 +1,4 @@
-import { apiUrl } from "./config.js";
+import { apiUrl } from "../hooks/config.js";
 import Navbar from "@/components/navbar";
 import OccurrenceForm from "@/components/form/occurrenceForm";
 import { useEffect, useState } from "react";
@@ -40,8 +40,8 @@ export default function HomePage() {
   const renderOccurrencesTable = () => {
     return (
       <div className="table-responsive">
-        <table className="w-full overflow-hidden rounded-lg bg-gray-800 text-white">
-          <thead className="bg-gray-800">
+        <table className="w-full overflow-hidden rounded-lg bg-indigo-600  text-white">
+          <thead className="bg-white">
             <tr>
               <th className="px-6 py-3 text-left text-lg font-semibold">
                 Tipo de Ocorrência
@@ -64,7 +64,7 @@ export default function HomePage() {
               .map((occurrence, index) => (
                 <tr
                   key={occurrence.id}
-                  className={index % 2 === 0 ? "bg-gray-700" : "bg-gray-600"}
+                  className={index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-600"}
                 >
                   <td className="px-6 py-4">{occurrence.occurrence_type}</td>
                   <td className="px-6 py-4">
@@ -90,7 +90,7 @@ export default function HomePage() {
             <div
               key={occurrence.id}
               className={`${
-                index % 2 === 0 ? "bg-gray-700" : "bg-gray-600"
+                index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-600"
               } mb-4 rounded-lg p-4`}
             >
               <p className="text-lg font-semibold">
@@ -109,14 +109,14 @@ export default function HomePage() {
   };
 
   return (
-    <div className="px min-h-screen bg-gray-900 text-white">
+    <div className="px min-h-screen bg-white text-black">
       <Navbar />
       <div className="flex flex-col px-8 pt-8 md:flex-row">
         <div className="w-full pr-0 md:w-3/4 md:pr-4">
           {Array.isArray(occurrences) && occurrences.length > 0 ? (
             <div className="hidden md:block">{renderOccurrencesTable()}</div>
           ) : (
-            <p className="text-white">Nenhuma ocorrência encontrada.</p>
+            <p className="text-black">Nenhuma ocorrência encontrada.</p>
           )}
 
           {Array.isArray(occurrences) && occurrences.length > 0 ? (
@@ -131,9 +131,9 @@ export default function HomePage() {
                 pageCount={pageCount}
                 onPageChange={changePage}
                 containerClassName="pagination flex space-x-2 text-white"
-                pageClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
-                previousClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
-                nextClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
+                pageClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
+                previousClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
+                nextClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 activeClassName="bg-cyan-700 font-bold hover:bg-cyan-600"
                 previousLinkClassName="flex items-center"
@@ -149,7 +149,7 @@ export default function HomePage() {
           {user ? (
             <OccurrenceForm />
           ) : (
-            <div className="rounded-lg bg-gray-800 p-4">
+            <div className="rounded-lg bg-indigo-600  p-4">
               <p className="text-white">
                 Você precisa estar logado para criar uma ocorrência.
               </p>

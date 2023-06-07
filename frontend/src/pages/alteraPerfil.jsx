@@ -7,102 +7,99 @@ import { AuthContext } from "../context/AuthContext.jsx";
 const AlterarPerfilPage = () => {
   const { atualizarPerfil, isLoading, error } = usePerfil();
   const { user } = useContext(AuthContext);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [senhaAtual, setSenhaAtual] = useState("");
-  const [novaSenha, setNovaSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [isAlterarSenha, setIsAlterarSenha] = useState(false);
+  const [password, setPassword] = useState("");
+  const [changePassword, setChangePassword] = useState(false)
 
   useEffect(() => {
     if (user) {
+      setName(user.name);
       setEmail(user.email);
     }
   }, [user]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
-    if (isAlterarSenha && novaSenha !== confirmarSenha) {
-      setError("A nova senha e a confirmação de senha não correspondem.");
-      return;
-    }
-
-    const profileData = {
+    await atualizarPerfil({
+      name,
       email,
-      senha: senhaAtual,
-      novaSenha: isAlterarSenha ? novaSenha : "",
-    };
+      password,
 
-    atualizarPerfil(profileData);
+    });
+
   };
 
   return (
-    <div>
+    <>
       <Navbar />
-      <div className={styles.container}>
-        <h1 className="text-2xl font-semibold mb-4 text-center">Alterar Perfil</h1>
-        {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
-            
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Senha Atual:</label>
-            <input
-              type="password"
-              value={senhaAtual}
-              onChange={(e) => setSenhaAtual(e.target.value)}
-              className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
-            
-            />
-          </div>
-          <div className={styles.checkboxGroup}>
-            <input
-              type="checkbox"
-              checked={isAlterarSenha}
-              onChange={(e) => setIsAlterarSenha(e.target.checked)}
-            
-            />
-            <label>Alterar Senha</label>
-          </div>
-          {isAlterarSenha && (
-            <>
-              <div className={styles.formGroup}>
-                <label>Nova Senha:</label>
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div
+          className={`rounded-md bg-indigo-600 p-8 ${
+            changePassword ? "w-96" : "w-96"
+          }`}
+        >
+          <h1 className="mb-4 text-center text-xl text-white">Alterar dados</h1>
+          <form onSubmit={handleSubmit}>
+            <label className="text-white">
+              Nome:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-2 w-full rounded-md bg-white p-2 text-black"
+              />
+            </label>
+            <br />
+            <label className="text-white">
+              Email:
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-2 w-full rounded-md bg-white text-black"
+              />
+            </label>
+            <br />
+            <div className="mt-3 flex items-center">
+              <label className="flex items-center text-white">
+                <span className="mr-2">Alterar senha:</span>
                 <input
-                  type="password"
-                  value={novaSenha}
-                  onChange={(e) => setNovaSenha(e.target.value)}
-                  className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
-            
+                  type="checkbox"
+                  checked={changePassword}
+                  onChange={(e) => setChangePassword(e.target.checked)}
+                  className="form-checkbox mt-1 text-green"
                 />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Confirmar Nova Senha:</label>
-                <input
-                  type="password"
-                  value={confirmarSenha}
-                  onChange={(e) => setConfirmarSenha(e.target.value)}
-                  className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border p-2 bg-gray-50"
-            
-                />
-              </div>
-            </>
-          )}
-          <button type="submit" disabled={isLoading} className={styles.button}>
-            Salvar Alterações
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
+              </label>
+            </div>
 
+            {changePassword && (
+              <>
+                <br />
+                <label className="text-white">
+                  Nova senha:
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-2 w-full rounded-md bg-white p-2 text-black"
+                  />
+                </label>
+              </>
+            )}
+            <br />
+            <button
+              type="submit"
+              className="mt-4 rounded-md bg-green-500 px-4 py-2 text-white"
+              disabled={isLoading}
+            >
+              Atualizar
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
 export default AlterarPerfilPage;

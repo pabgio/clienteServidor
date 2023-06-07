@@ -1,4 +1,4 @@
-import { baseUrl } from "@/api/baseUrl";
+import { apiUrl } from "../../hooks/config.js";
 import { useState } from "react";
 
 export default function OccurrenceForm() {
@@ -23,8 +23,11 @@ export default function OccurrenceForm() {
     event.preventDefault();
 
     const user = JSON.parse(localStorage.getItem("user"));
+    console.log("User:", user);
     const token = user ? user.token : "";
-    const id = user ? user.id : "";
+    console.log("Token:", token);
+    const id = user ? user.id : "" ;
+    console.log("Id:", id);
 
     const formattedDateTime = formatDateTime(new Date(registeredAt));
 
@@ -35,8 +38,7 @@ export default function OccurrenceForm() {
       km: km,
       user_id: id,
     };
-
-    const response = await fetch(`${baseUrl}/occurrences`, {
+    const response = await fetch(`${apiUrl}/occurrences`, {
       method: "POST",
       body: JSON.stringify(occurrence),
       headers: {
@@ -61,7 +63,7 @@ export default function OccurrenceForm() {
   };
 
   return (
-    <div className="rounded-lg bg-gray-800 px-6 py-3 shadow-md">
+    <div className="rounded-lg bg-indigo-600 px-6 py-3 shadow-md">
       <h3 className="mb-4 text-lg font-medium text-white">
         Adicionar uma ocorrência
       </h3>
@@ -76,7 +78,7 @@ export default function OccurrenceForm() {
             value={registeredAt}
             onChange={(event) => setRegisteredAt(event.target.value)}
             max={currentDateTime}
-            className="w-full rounded-md border border-gray-300 bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -88,7 +90,7 @@ export default function OccurrenceForm() {
             type="text"
             value={local}
             onChange={(event) => setLocal(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -99,7 +101,7 @@ export default function OccurrenceForm() {
           <select
             value={occurrenceType}
             onChange={(event) => setOccurrenceType(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecione...</option>
             <option value="1">Atropelamento</option>
@@ -123,13 +125,13 @@ export default function OccurrenceForm() {
             type="number"
             value={km}
             onChange={(event) => setKm(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <button
           type="submit"
-          className="rounded-md bg-blue-500 px-4 py-2 text-white transition duration-200 hover:bg-blue-600"
+          className="rounded-md bg-green-500 px-4 py-2 text-white transition duration-200 hover:bg-green-600 focus:outline-none focus:bg-green-600"
         >
           Enviar
         </button>
