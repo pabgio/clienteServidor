@@ -36,7 +36,6 @@ export const cadastrarOcorrencia = async (req, res) => {
     }
 
     const occurrence = await Ocorrencia.create({
-      
       registered_at,
       local,
       occurrence_type,
@@ -46,7 +45,7 @@ export const cadastrarOcorrencia = async (req, res) => {
     });
 
     return res.status(201).json({
-      id: occurrence.ocorrenciaId,
+      id: occurrence._id,
       registered_at: occurrence.registered_at,
       local: occurrence.local,
       occurrence_type: occurrence.occurrence_type,
@@ -64,7 +63,7 @@ try {
   const data = await Ocorrencia.find({});
   if (data.length > 0) {
     const occurrences = data.map((occurrence) => ({
-      id: occurrence.ocorrenciaId,
+      id: occurrence._id,
       registered_at: occurrence.registered_at,
       local: occurrence.local,
       occurrence_type: occurrence.occurrence_type,
@@ -89,7 +88,7 @@ try {
 export const deletaOcorrencia = async (req, res) => {
   try {
     const { customId } = req.params;
-    const ocorrencia = await Ocorrencia.findOneAndDelete({ ocorrenciaId: customId });
+    const ocorrencia = await Ocorrencia.findOneAndDelete({ _id: customId });
 
     if (!ocorrencia) {
       console.log("Nenhuma ocorrência encontrada!");
@@ -107,11 +106,11 @@ export const deletaOcorrencia = async (req, res) => {
 // Atualizar Ocorrência
 export const updateOcorrencia = async (req, res) => {
   try {
-    const { ocorrenciaId } = req.params;
+    const { _id } = req.params;
     const ocorrencia = req.body;
 
     const updatedOcorrencia = await Ocorrencia.findOneAndUpdate(
-      { ocorrenciaId: ocorrenciaId },
+      { _id: _id },
       ocorrencia,
       { new: true }
     );

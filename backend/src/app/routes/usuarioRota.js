@@ -24,5 +24,5 @@ userRouter.post("/logout", logoutUser);
 // Others routes
 userRouter.get("/", getUsers);
 
-userRouter.put("/:id", updateUser);
+userRouter.put("/users/:id", updateUser);
 userRouter.delete("/:id", deleteUser);

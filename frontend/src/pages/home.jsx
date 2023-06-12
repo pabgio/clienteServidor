@@ -28,7 +28,7 @@ export default function HomePage() {
   }, []);
 
   const formatDateTime = (dateTime) => {
-    return format(new Date(dateTime), "dd-MM-yyyy HH:mm:ss");
+    return format(new Date(dateTime), "yyyy-MM-dd HH:mm:ss.SSS'Z'");
   };
 
   const pageCount = Math.ceil(occurrences?.length / occurrencesPerPage);

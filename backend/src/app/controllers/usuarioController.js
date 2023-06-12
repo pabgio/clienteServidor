@@ -159,8 +159,6 @@ export const deleteUser = async (req, res) => {
 
 // Update
 
-
-
 export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
@@ -170,6 +168,7 @@ export const updateUser = async (req, res) => {
     console.log(
       `Id -> ${id} | Name -> ${name} | Email -> ${email} | Password -> ${password} | Token -> ${token}`
     );
+
     if (!token) {
       return res.status(401).json({ message: "Token não informado!" });
     }
@@ -179,7 +178,6 @@ export const updateUser = async (req, res) => {
       return res.status(401).json({ message: "Token inválido" });
     }
 
-   
     const user = await Usuario.findOne({ _id: id });
 
     console.log(user);
@@ -197,32 +195,35 @@ export const updateUser = async (req, res) => {
           .json({ message: "Este email já está sendo utilizado!" });
       }
     }
-if (password) {
-      if (password.length < 2) {
-        return res
-          .status(400)
-         
-     .json({ message: "A senha não é forte o suficiente!" });
-      }
+
+    if (password && password.length < 2) {
+      return res
+        .status(400)
+        .json({ message: "A senha não é forte o suficiente!" });
     }
 
-    const updateUser= {name,email}
+    const updateUser = { email };
+    if (name) {
+      updateUser.name = String(name);
+    }
+    if (password) {
+      updateUser.password = password;
+    }
 
-   if (password != nul){
-
-    updateUser.password = password;
-
-   }
-   await Usuario.findOneAndUpdate({ _id: id }, updateUser);
+    const updatedUser = await Usuario.findOneAndUpdate({ _id: id }, updateUser, {
+      new: true,
+    });
 
     console.log("Usuário atualizado com sucesso");
 
-    return res.status(200).json({ id: user._id, name: user.name, email: user.email });
+    return res
+      .status(200)
+      .json({ id: updatedUser._id, name: updatedUser.name, email: updatedUser.email });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: error.message });
   }
-  
-
 };
+
+
 
