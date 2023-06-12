@@ -20,7 +20,7 @@ const ocorrenciaSchema = new mongoose.Schema({
         type: Number,
         required: true,
         minlength: 10,
-        maxlength: 125,
+        maxlength: 9999,
     },
     user_id: {
         type: Number,
