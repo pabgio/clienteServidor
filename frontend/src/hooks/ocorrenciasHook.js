@@ -16,6 +16,7 @@ export const useOcorrencias = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?.id;
+      const token = user?.token;
 
       const response = await fetch(`${apiUrl}/occurrences`, {
         method: "POST",

@@ -101,20 +101,38 @@ export const criaUsuario = async (req, res) => {
 // Logout
 export const logoutUser = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    console.log(token);
+    const id = req.body.id;
+    const token = req.headers.authorization;
+    
+    const user = await Usuario.findById({_id: id});
 
-    // Adicione o token à lista negra (por exemplo, em um banco de dados ou cache)
-    await InvalidToken(token);
+    if (!user) {
+      console.log("Usuário não encontrado!");
+      return res.status(404).json({ message: "Usuário não encontrado!" });
+    }
+
+    const tokenExist = await InvalidToken.findOne({ token });
+
+    if (tokenExist) {
+      console.log("Token invalido!");
+      return res.status(401).json({ message: "Token Invalido" });
+    }
+
+    await InvalidToken.create({ token,
+    expirationDate: new Date(Date.now()+ 24*60*60*1000) });
 
     console.log("Logout realizado com sucesso");
-    res.status(200).json({ message: "Logout realizado com sucesso" });
+    return res.status(200).json({ message: "Logout realizado com sucesso" });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    return res.status(500).json({ message: "Erro no servidor!" });
   }
 };
 
+
+
+
+ 
 // Get All
 export const getUsers = async (req, res) => {
   try {

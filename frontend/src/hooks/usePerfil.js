@@ -20,7 +20,7 @@ export const usePerfil = () => {
     const token = user ? user.token : "";
     const userId = user ? user.id : "";
 
-
+     console.log(name, email, hashedPassword, token, userId);
       const response = await fetch(`${apiUrl}/users/${userId}`, {
         method: "PUT",
         body: JSON.stringify({ name, email, password: hashedPassword }),

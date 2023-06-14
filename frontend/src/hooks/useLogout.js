@@ -14,7 +14,7 @@ export const useLogout = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      const userId = user?.id;
+      const id = user?.id;
 
       if (token) {
         const response = await fetch(`${apiUrl}/logout`, {
@@ -23,7 +23,7 @@ export const useLogout = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId }), // Enviar o userId no corpo da requisição
+          body: JSON.stringify({ id }), // Enviar o userId no corpo da requisição
         });
 
         const json = await response.json();

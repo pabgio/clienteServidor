@@ -21,12 +21,12 @@ const AlterarPerfilPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-    await atualizarPerfil({
+    await atualizarPerfil(
       name,
       email,
       password,
 
-    });
+    );
 
   };
 
