@@ -1,5 +1,5 @@
-import { apiUrl } from "../../hooks/config.js";
 import { useState } from "react";
+import { useOcorrencias } from "../../hooks/ocorrenciasHook.js";
 
 export default function OccurrenceForm() {
   const [registeredAt, setRegisteredAt] = useState("");
@@ -7,6 +7,8 @@ export default function OccurrenceForm() {
   const [km, setKm] = useState("");
   const [occurrenceType, setOccurrenceType] = useState("");
   const currentDateTime = new Date().toISOString().slice(0, 16);
+
+  const { cadastrarOcorrencia } = useOcorrencias();
 
   function formatDateTime(dateTime) {
     const year = dateTime.getFullYear();
@@ -22,13 +24,6 @@ export default function OccurrenceForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log("User:", user);
-    const token = user ? user.token : "";
-    console.log("Token:", token);
-    const id = user ? user.id : "" ;
-    console.log("Id:", id);
-
     const formattedDateTime = formatDateTime(new Date(registeredAt));
 
     const occurrence = {
@@ -36,30 +31,9 @@ export default function OccurrenceForm() {
       local: local,
       occurrence_type: Number(occurrenceType),
       km: km,
-      user_id: id,
     };
-    const response = await fetch(`${apiUrl}/occurrences`, {
-      method: "POST",
-      body: JSON.stringify(occurrence),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      console.log(json.message);
-    }
-
-    if (response.ok) {
-      setRegisteredAt("");
-      setLocal("");
-      setKm("");
-      setOccurrenceType("");
-      console.log("Occurrence added:", json);
-    }
+    cadastrarOcorrencia(occurrence);
   };
 
   return (
@@ -78,7 +52,7 @@ export default function OccurrenceForm() {
             value={registeredAt}
             onChange={(event) => setRegisteredAt(event.target.value)}
             max={currentDateTime}
-            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -90,7 +64,7 @@ export default function OccurrenceForm() {
             type="text"
             value={local}
             onChange={(event) => setLocal(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -101,7 +75,7 @@ export default function OccurrenceForm() {
           <select
             value={occurrenceType}
             onChange={(event) => setOccurrenceType(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecione...</option>
             <option value="1">Atropelamento</option>
@@ -125,7 +99,7 @@ export default function OccurrenceForm() {
             type="number"
             value={km}
             onChange={(event) => setKm(event.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-whie px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 

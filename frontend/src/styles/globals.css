@@ -8,6 +8,7 @@
   outline: none;
   box-sizing: border-box;
   font-family: 'Work Sans', sans-serif;
+  
 }
 
 header{
@@ -15,7 +16,7 @@ header{
   z-index: 30;
   top: 0;
 }
-nav{
+.nav{
   display: flex;
   padding: 16px;
   justify-content: space-between;
@@ -41,15 +42,13 @@ nav{
   top: 60px;
   width: 288px;
   row-gap: 24px;
-  right: -288px;
+  right: -250px;
   padding: 24px 16px;
   transition: all 0.2s;
   min-height: calc(100vh - 60px);
   background-color: #6077eb;
 }
-.nav__menu-list.active{
-  right: 0;
-}
+
 .nav__link{
   font-size: 18px; 
   position: relative;
@@ -60,12 +59,7 @@ nav{
  font-weight: bold;
 }
 
-.center{
-  min-height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 @media screen and (min-width: 768px) {
   .nav__menu-bar{
     display: none;
@@ -76,7 +70,7 @@ nav{
     min-height: fit-content;
     width: fit-content;
     column-gap: 24px;
-    align-items: center;
+    align-items:  right;
   }
   .nav__link::before{
     content: '';

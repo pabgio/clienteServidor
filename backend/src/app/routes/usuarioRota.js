@@ -25,4 +25,4 @@ userRouter.post("/logout", logoutUser);
 userRouter.get("/", getUsers);
 
 userRouter.put("/users/:id", updateUser);
-userRouter.delete("/:id", deleteUser);
+userRouter.delete("/users/:id", deleteUser);

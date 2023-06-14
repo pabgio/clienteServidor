@@ -64,7 +64,7 @@ export default function HomePage() {
               .map((occurrence, index) => (
                 <tr
                   key={occurrence.id}
-                  className={index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-600"}
+                  className={index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-400"}
                 >
                   <td className="px-6 py-4">{occurrence.occurrence_type}</td>
                   <td className="px-6 py-4">
@@ -90,7 +90,7 @@ export default function HomePage() {
             <div
               key={occurrence.id}
               className={`${
-                index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-600"
+                index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-400"
               } mb-4 rounded-lg p-4`}
             >
               <p className="text-lg font-semibold">

@@ -12,26 +12,25 @@ export const useOcorrencias = () => {
   const cadastrarOcorrencia = async (ocorrenciaData) => {
     setIsLoading(true);
     setMessage(null);
-    
 
     try {
-        const user = JSON.parse(localStorage.getItem("user"));
-    
-    const userId = user?.id;
-      const response = await fetch(`${apiUrl}/occurences`, {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?.id;
+
+      const response = await fetch(`${apiUrl}/occurrences`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(ocorrenciaData, `${userId}` ),
+        body: JSON.stringify({ ...ocorrenciaData, user_id: userId }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         // Sucesso no cadastro da ocorrência
-        router.push("/ocorrencias");
+        router.push("/home");
       } else {
         // Ocorreu um erro no cadastro da ocorrência
         setMessage(data.message);
@@ -72,41 +71,10 @@ export const useOcorrencias = () => {
     }
   };
 
-  const visualizarOcorrencia = async (ocorrenciaId) => {
-    setIsLoading(true);
-    setMessage(null);
-
-    try {
-      const response = await fetch(`${apiUrl}/ocorrencias/${ocorrenciaId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Sucesso na obtenção da ocorrência
-        // Faça algo com os dados retornados (ex: atualizar estado, exibir na tela, etc.)
-      } else {
-        // Ocorreu um erro na obtenção da ocorrência
-        setMessage(data.message);
-      }
-    } catch (error) {
-      // Ocorreu um erro de conexão com o servidor
-      setMessage("Erro de conexão com o servidor.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Outras funções relacionadas a ocorrências (ex: atualizar ocorrência, excluir ocorrência, etc.)
-
   return {
     cadastrarOcorrencia,
     listarOcorrencias,
-    visualizarOcorrencia,
-    isLoading,
     message,
+    isLoading,
   };
 };

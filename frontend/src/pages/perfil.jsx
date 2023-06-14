@@ -31,12 +31,12 @@ const Perfil = () => {
 
   const handleDeletarUsuario = async (e) => {
     e.preventDefault();
-    const confirmDeletion = confirm("Tem certeza que deseja deletar o usuário?");
+    const confirmDeletion = window.confirm("Tem certeza que deseja deletar o usuário?");
     if (confirmDeletion) {
-      await deletarUsuario(user.id);
-      router.push("/login");
+      await deletarUsuario();
     }
   };
+  
 
   return (
     <div>

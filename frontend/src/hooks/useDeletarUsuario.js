@@ -1,20 +1,27 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+
 import { apiUrl } from "./config.js";
 
 export const useDeletarUsuario = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
-  const deletarUsuario = async (userId) => {
+  const deletarUsuario = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      const token = user ? user.token : "";
+      const userId = user ? user.id : user
 
       const response = await fetch(`${apiUrl}/users/${userId}`, {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -23,6 +30,7 @@ export const useDeletarUsuario = () => {
         // Deletou o usuário com sucesso
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        router.push("/login");
       } else {
         const json = await response.json();
         setError(json.message);

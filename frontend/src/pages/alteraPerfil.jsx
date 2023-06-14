@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { usePerfil } from "../hooks/usePerfil.js";
-import styles from "../styles/AlterarPerfilPage.module.css";
 import Navbar from "../components/Navbar.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 

@@ -23,7 +23,7 @@ export default function Navbar() {
     <>
       <nav className="bg-indigo-600">
         <div className="px-2 sm:px-6 lg:px-9 items-center">
-          <div className="relative flex h-16 items-center justify-between">
+          <div className="relative flex h-16 ">
             <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
               <div className="flex flex-shrink-0 items-center">
                 <Link href="/home" className="text-2xl font-bold text-white">
@@ -34,10 +34,10 @@ export default function Navbar() {
 
             <div className="hidden md:block">
               {user && (
-                <p className="text-sm font-medium text-gray-300">
+                <p className="text-lg font-medium text-white ">
                   <a href="/perfil">
                      Bem-vindo {" "}
-                    <span className="text-cyan-500">{user.email}</span>
+                    <span className="text-cyan-100">{user.email}</span>
                   </a>
                 </p>
               )}
