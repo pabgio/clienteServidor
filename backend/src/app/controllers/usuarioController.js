@@ -148,6 +148,26 @@ export const getUsers = async (req, res) => {
 };
 
 // Get One
+export const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findById({ _id: id });
+    console.log(usuario);
+
+    if (!usuario) {
+      console.log("Usuário não encontrado!");
+      return res.status(404).json({ message: "Usuário não encontrado!" });
+    }
+
+    console.log("Usuário encontrado com sucesso");
+    res.status(200).json({id: usuario._id, name: usuario.name, email : usuario.email });
+  } catch (error) {
+    console.log("Erro no servidor!");
+    res.status(500).json({ message: "Erro no servidor!" });
+  }
+};
+    
+    
 // Get One
 
 // Delete
@@ -165,7 +185,7 @@ export const deleteUser = async (req, res) => {
     }
 
     console.log("Usuário deletado com sucesso");
-    res.status(200).json({ message: "Usuário deletado com sucesso" });
+    res.status(200).json({ message: "Usuário" + usuario +  "deletado com sucesso" });
   } catch (error) {
     console.log("Erro no servidor!");
     res.status(500).json({ message: "Erro no servidor!" });

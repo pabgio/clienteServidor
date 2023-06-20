@@ -1,34 +1,31 @@
-import { apiUrl } from "../hooks/config.js";
 import Navbar from "../components/Navbar.jsx";
-import OccurrenceForm from "@/components/form/occurrenceForm";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { format } from "date-fns";
 import ReactPaginate from "react-paginate";
 
-export default function HomePage() {
+import { useOcorrencias } from "@/hooks/ocorrenciasHook.js";
+
+export default function UsuarioOcorrencia() {
   const [occurrences, setOccurrences] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
   const { user } = useAuthContext();
+  const { listarOcorrenciaUser, isLoading, message } = useOcorrencias();
   const occurrencesPerPage = 6;
   const pagesVisited = pageNumber * occurrencesPerPage;
 
   useEffect(() => {
-    const fetchOccurrences = async () => {
-      const response = await fetch(`${apiUrl}/occurrences`);
-      const json = await response.json();
-      console.log(json);
-
-      if (response.ok) {
-        setOccurrences(json);
-      }
-    };
-
-    fetchOccurrences();
+    listarOcorrenciaUser().then((json) => {
+      setOccurrences(json);
+    }
+    ).catch ((error) => {
+      console.log(error)
+    }
+    );
   }, []);
 
   const formatDateTime = (dateTime) => {
-    return format(new Date(dateTime), "yyyy-MM-dd HH:mm:ss.SSS'Z'");
+    return format(new Date(dateTime), "dd-MM-yyyy HH:mm:ss");
   };
 
   const pageCount = Math.ceil(occurrences?.length / occurrencesPerPage);
@@ -40,8 +37,8 @@ export default function HomePage() {
   const renderOccurrencesTable = () => {
     return (
       <div className="table-responsive">
-        <table className="w-full overflow-hidden rounded-lg bg-indigo-600  text-white">
-          <thead className="bg-slate-900">
+        <table className="w-full overflow-hidden rounded-l text-white">
+          <thead className="bg-gray-800">
             <tr>
               <th className="px-6 py-3 text-left text-lg font-semibold">
                 Tipo de Ocorrência
@@ -64,7 +61,7 @@ export default function HomePage() {
               .map((occurrence, index) => (
                 <tr
                   key={occurrence.id}
-                  className={index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-400"}
+                  className={index % 2 === 0 ? "bg-indigo-600" : "bg-gray-400"}
                 >
                   <td className="px-6 py-4">{occurrence.occurrence_type}</td>
                   <td className="px-6 py-4">
@@ -90,10 +87,10 @@ export default function HomePage() {
             <div
               key={occurrence.id}
               className={`${
-                index % 2 === 0 ? "bg-indigo-600 " : "bg-gray-400"
+                index % 2 === 0 ? "bg-gray-700" : "bg-gray-600"
               } mb-4 rounded-lg p-4`}
             >
-              <p className="text-sm font-semibold">
+              <p className="text-lg font-semibold">
                 Tipo de Ocorrência: {occurrence.occurrence_type}
               </p>
               <p className="text-sm">
@@ -109,7 +106,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="px min-h-screen bg-white text-black">
+    <div className="px min-h-screen text-black">
       <Navbar />
       <div className="flex flex-col px-8 pt-8 md:flex-row">
         <div className="w-full pr-0 md:w-3/4 md:pr-4">
@@ -131,9 +128,9 @@ export default function HomePage() {
                 pageCount={pageCount}
                 onPageChange={changePage}
                 containerClassName="pagination flex space-x-2 text-white"
-                pageClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
-                previousClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
-                nextClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-indigo-600  cursor-pointer"
+                pageClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
+                previousClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
+                nextClassName="bg-gray-600 py-2 px-3 rounded-md hover:bg-gray-700 cursor-pointer"
                 disabledClassName="opacity-50 cursor-not-allowed"
                 activeClassName="bg-cyan-700 font-bold hover:bg-cyan-600"
                 previousLinkClassName="flex items-center"
@@ -141,18 +138,6 @@ export default function HomePage() {
                 previousLinkLabel={<i className="fas fa-chevron-left"></i>}
                 nextLinkLabel={<i className="fas fa-chevron-right"></i>}
               />
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4 w-full pl-0 md:mt-0 md:w-1/4 md:pl-4">
-          {user ? (
-            <OccurrenceForm />
-          ) : (
-            <div className="rounded-lg bg-indigo-600  p-4">
-              <p className="text-white">
-                Você precisa estar logado para criar uma ocorrência.
-              </p>
             </div>
           )}
         </div>

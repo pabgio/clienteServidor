@@ -8,6 +8,7 @@ export const useOcorrencias = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuthContext();
   const router = useRouter();
+  const [ocorrencia, setOcorrencia] = useState([]);
 
   const cadastrarOcorrencia = async (ocorrenciaData) => {
     setIsLoading(true);
@@ -24,7 +25,9 @@ export const useOcorrencias = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+
         body: JSON.stringify({ ...ocorrenciaData, user_id: userId }),
+
       });
 
       const data = await response.json();
@@ -71,10 +74,27 @@ export const useOcorrencias = () => {
       setIsLoading(false);
     }
   };
+  const listarOcorrenciaUser = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : "";
+  const id = user ? user.id : "";
+
+  const response = await fetch(`${apiUrl}/occurrences/users/${id}`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const json = await response.json();
+
+  return json;
+};
 
   return {
     cadastrarOcorrencia,
     listarOcorrencias,
+    listarOcorrenciaUser,
     message,
     isLoading,
   };

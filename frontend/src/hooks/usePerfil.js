@@ -37,11 +37,13 @@ export const usePerfil = () => {
         localStorage.setItem("user", JSON.stringify(atualizarPerfil));
         dispatch({ type: "UPDATE", payload: atualizarPerfil });
 
+        router.push("home");
+
+
         // Atualiza os dados do perfil no estado global
        toast.success("Perfil atualizado com sucesso!");
 
         // Redireciona para a página de perfil ou outra página desejada
-        router.push("/home");
       } else {
         setError(json.message);
       }

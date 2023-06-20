@@ -3,7 +3,7 @@ import  { Router }  from   'express' ;
 import {
     cadastrarOcorrencia,
     getOccurrences,
-    
+    getOccurence,
     updateOcorrencia,
     deletaOcorrencia,
 
@@ -16,8 +16,10 @@ ocorrenciaRouter.post("/", cadastrarOcorrencia);
 // Retorna todas as ocorrências
 ocorrenciaRouter.get("/", getOccurrences);
 
+
 // Retorna uma ocorrência específica
 
+ocorrenciaRouter.get("/users/:id", getOccurence);
 
 // Atualiza uma ocorrência específica
 ocorrenciaRouter.put("/:id", updateOcorrencia);

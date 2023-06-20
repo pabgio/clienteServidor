@@ -60,7 +60,8 @@ export const cadastrarOcorrencia = async (req, res) => {
 
 export const getOccurrences = async (req, res) => {
 try {
-  const data = await Ocorrencia.find({});
+  const data = await Ocorrencia.find({}).populate("user_id", "name");
+
   if (data.length > 0) {
     const occurrences = data.map((occurrence) => ({
       id: occurrence._id,
@@ -69,8 +70,9 @@ try {
       occurrence_type: occurrence.occurrence_type,
       km: occurrence.km,
       token: occurrence.token,
-      user_id: occurrence.user_id,
+      user_id: occurrence.user_id.name,
     }));
+    
     res.status(200).json(occurrences);
   } else {
     res.status(201).json({ message: "Nenhuma ocorrência encontrada" });
@@ -80,6 +82,56 @@ try {
 }
 };
 
+export const getOccurence = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const token = req.headers.authorization;
+
+    console.log(`Id -> ${id} | Token -> ${token}`);
+
+    if (!token) {
+      return res.status(401).json({ message: "Token não informado!" });
+    }
+
+    const existingToken = await InvalidToken.findOne({ token });
+
+    if (existingToken) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    const user = await Usuario.findOne({ _id: id });
+    console.log(`User-> ${user}`);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    const data = await Ocorrencia.find()
+      .where("user_id")
+      .equals({ _id: id })
+      .populate("user_id", "name");
+
+    if (data.length > 0) {
+      const occurrences = data.map((occurrence) => ({
+        id: occurrence._id,
+        registered_at: occurrence.registered_at,
+        local: occurrence.local,
+        occurrence_type: occurrence.occurrence_type,
+        km: occurrence.km,
+        token: occurrence.token,
+        user_id: occurrence.user_id.name,
+      }));
+      res.status(200).json(occurrences);
+    } else {
+      res
+        .status(200)
+        .json({ message: "Nenhuma ocorrência encontrada", occurrences: [] });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Erro no servidor" });
+  }
+};
+
 
 // Visualizar Ocorrência
 
@@ -87,8 +139,8 @@ try {
 // Excluir Ocorrência
 export const deletaOcorrencia = async (req, res) => {
   try {
-    const { customId } = req.params;
-    const ocorrencia = await Ocorrencia.findOneAndDelete({ _id: customId });
+    const { id } = req.params;
+    const ocorrencia = await Ocorrencia.findOneAndRemove({ _id: id });
 
     if (!ocorrencia) {
       console.log("Nenhuma ocorrência encontrada!");
