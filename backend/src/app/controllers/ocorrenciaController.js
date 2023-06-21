@@ -158,19 +158,30 @@ export const deletaOcorrencia = async (req, res) => {
 // Atualizar Ocorrência
 export const updateOcorrencia = async (req, res) => {
   try {
-    const { _id } = req.params;
-    const ocorrencia = req.body;
+    const id = req.params.id;
+    const occurrence = req.body;
 
-    const updatedOcorrencia = await Ocorrencia.findOneAndUpdate(
-      { _id: _id },
-      ocorrencia,
-      { new: true }
-    );
+    const ocorrencia = await Ocorrencia.findOne({ _id: id });
 
-    if (!updatedOcorrencia) {
+
+    if (!occurrence) {
       console.log("Nenhuma ocorrência encontrada!");
       return res.status(404).json({ message: "Nenhuma ocorrência encontrada!" });
     }
+    if (occurrence.registered_at !==  ocorrencia.registered_at) {
+      ocorrencia.registered_at = occurrence.registered_at;
+    }
+    if (occurrence.local !== ocorrencia.local) {
+      ocorrencia.local = occurrence.local;
+    }
+    if (occurrence.occurrence_type !== ocorrencia.occurrence_type) {
+      ocorrencia.occurrence_type = occurrence.occurrence_type;
+    }
+    if (occurrence.km !== ocorrencia.km) {
+      ocorrencia.km = occurrence.km;
+    }
+
+    await ocorrencia.save();
 
     console.log("Ocorrência atualizada com sucesso");
     res.status(200).json({ message: "Ocorrência atualizada com sucesso" });
@@ -178,4 +189,12 @@ export const updateOcorrencia = async (req, res) => {
     console.log("Erro no servidor!");
     res.status(500).json({ message: "Erro no servidor!" });
   }
+
+
+  
+     
+    
+    
+
+  
 };

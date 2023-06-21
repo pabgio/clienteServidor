@@ -2,6 +2,7 @@ import { useState } from "react";
 import { apiUrl } from "./config.js";
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 export const useOcorrencias = () => {
   const [message, setMessage] = useState(null);
@@ -35,13 +36,14 @@ export const useOcorrencias = () => {
       if (response.ok) {
         // Sucesso no cadastro da ocorrência
         router.push("/home");
+        toast.success("Ocorrência cadastrada com sucesso");
       } else {
         // Ocorreu um erro no cadastro da ocorrência
         setMessage(data.message);
       }
     } catch (error) {
       // Ocorreu um erro de conexão com o servidor
-      setMessage("Erro de conexão com o servidor.");
+      toast.error("Erro de conexão com o servidor.");
     } finally {
       setIsLoading(false);
     }
@@ -91,11 +93,75 @@ export const useOcorrencias = () => {
   return json;
 };
 
-  return {
-    cadastrarOcorrencia,
-    listarOcorrencias,
-    listarOcorrenciaUser,
-    message,
-    isLoading,
-  };
+const editarOcorrencia = async (ocorrenciaId, ocorrenciaData) => {
+  setIsLoading(true);
+  setMessage(null);
+
+  try {
+    const response = await fetch(`${apiUrl}/occurrences/${ocorrenciaId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(ocorrenciaData),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Sucesso na edição da ocorrência
+      // Faça algo em resposta à edição bem-sucedida
+      toast.success("Ocorrência editada com sucesso");
+      router.push("home");
+    } else {
+      // Ocorreu um erro na edição da ocorrência
+      setMessage(data.message);
+    }
+  } catch (error) {
+    // Ocorreu um erro de conexão com o servidor
+    setMessage("Erro de conexão com o servidor.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const deletarOcorrencia = async (ocorrenciaId) => {
+  setIsLoading(true);
+  setMessage(null);
+
+  try {
+    const response = await fetch(`${apiUrl}/occurrences/${ocorrenciaId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      // Sucesso na exclusão da ocorrência
+      // Faça algo em resposta à exclusão bem-sucedida
+      toast.success("Ocorrência excluída com sucesso");
+    } else {
+      // Ocorreu um erro na exclusão da ocorrência
+      const data = await response.json();
+      setMessage(data.message);
+    }
+  } catch (error) {
+    // Ocorreu um erro de conexão com o servidor
+    setMessage("Erro de conexão com o servidor.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+return {
+  cadastrarOcorrencia,
+  listarOcorrencias,
+  listarOcorrenciaUser,
+  editarOcorrencia, 
+  deletarOcorrencia, 
+  message,
+  isLoading,
+};
 };

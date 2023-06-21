@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 import { apiUrl } from "./config.js";
+import { toast } from "react-toastify";
 
 export const useDeletarUsuario = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +32,7 @@ export const useDeletarUsuario = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         router.push("/login");
+        toast.success("Usuário deletado com sucesso!");
       } else {
         const json = await response.json();
         setError(json.message);
