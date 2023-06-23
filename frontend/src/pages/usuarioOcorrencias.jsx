@@ -132,7 +132,7 @@ export default function UsuarioOcorrencia() {
             <div
               key={occurrence.id}
               className={`${
-                index % 2 === 0 ? "bg-gray-700" : "bg-gray-600"
+                index % 2 === 0 ? "bg-indigo-600" : "bg-gray-400"
               } mb-4 rounded-lg p-4`}
             >
               <p className="text-lg font-semibold">
@@ -144,11 +144,27 @@ export default function UsuarioOcorrencia() {
               <p className="text-sm">Local: {occurrence.local}</p>
               <p className="text-sm">KM: {occurrence.km}</p>
               <p className="text-sm">Criado por: {occurrence.user_id}</p>
+  
+              <div>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  onClick={() => handleEdit(occurrence.id)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => handleDelete(occurrence.id)}
+                >
+                  Deletar
+                </button>
+              </div>
             </div>
           ))}
       </div>
     );
   };
+  
 
   return (
     <div className="px min-h-screen text-black">

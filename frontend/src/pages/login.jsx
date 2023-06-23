@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLogin } from "@/hooks/useLogin";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Error from "@/components/error";
-import Home from ".";
-import Signup from "./signup";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 export default function Login() {
@@ -45,7 +42,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/road.jpg)]">
-      <div className="max-w-md w-full p-6 bg-white rounded shadow">
+      <div className="max-w-md w-full p-6 bg-white bg-opacity-70 rounded shadow">
         <h1 className="text-2xl font-semibold mb-4 text-center">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

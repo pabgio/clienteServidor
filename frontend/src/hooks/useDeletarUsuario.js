@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import { apiUrl } from "./config.js";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const useDeletarUsuario = () => {
   const [isLoading, setIsLoading] = useState(false);

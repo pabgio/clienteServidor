@@ -3,6 +3,7 @@ import { apiUrl } from "./config.js";
 import { useAuthContext } from "./useAuthContext";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const useOcorrencias = () => {
   const [message, setMessage] = useState(null);
@@ -96,6 +97,10 @@ export const useOcorrencias = () => {
 const editarOcorrencia = async (ocorrenciaId, ocorrenciaData) => {
   setIsLoading(true);
   setMessage(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : "";
+  const user_id = user ? user.id : "";
+  const dataOc = { ...ocorrenciaData, user_id: user_id };
 
   try {
     const response = await fetch(`${apiUrl}/occurrences/${ocorrenciaId}`, {
@@ -104,7 +109,7 @@ const editarOcorrencia = async (ocorrenciaId, ocorrenciaData) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(ocorrenciaData),
+      body: JSON.stringify(dataOc),
     });
 
     const data = await response.json();
@@ -112,8 +117,10 @@ const editarOcorrencia = async (ocorrenciaId, ocorrenciaData) => {
     if (response.ok) {
       // Sucesso na edição da ocorrência
       // Faça algo em resposta à edição bem-sucedida
-      toast.success("Ocorrência editada com sucesso");
       router.push("home");
+
+      toast.success("Ocorrência editada com sucesso");
+
     } else {
       // Ocorreu um erro na edição da ocorrência
       setMessage(data.message);
@@ -129,6 +136,8 @@ const editarOcorrencia = async (ocorrenciaId, ocorrenciaData) => {
 const deletarOcorrencia = async (ocorrenciaId) => {
   setIsLoading(true);
   setMessage(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : "";
 
   try {
     const response = await fetch(`${apiUrl}/occurrences/${ocorrenciaId}`, {

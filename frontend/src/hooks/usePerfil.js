@@ -4,6 +4,7 @@ import { useAuthContext } from "./useAuthContext";
 import { apiUrl } from "./config.js";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const usePerfil = () => {
   const [error, setError] = useState(null);

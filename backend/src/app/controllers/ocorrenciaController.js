@@ -60,7 +60,8 @@ export const cadastrarOcorrencia = async (req, res) => {
 
 export const getOccurrences = async (req, res) => {
 try {
-  const data = await Ocorrencia.find({}).populate("user_id", "name");
+  const data = await Ocorrencia.find()
+;
 
   if (data.length > 0) {
     const occurrences = data.map((occurrence) => ({
@@ -70,7 +71,7 @@ try {
       occurrence_type: occurrence.occurrence_type,
       km: occurrence.km,
       token: occurrence.token,
-      user_id: occurrence.user_id.name,
+      user_id: occurrence.user_id,
     }));
     
     res.status(200).json(occurrences);
@@ -108,8 +109,7 @@ export const getOccurence = async (req, res) => {
 
     const data = await Ocorrencia.find()
       .where("user_id")
-      .equals({ _id: id })
-      .populate("user_id", "name");
+      .equals({ _id: id });
 
     if (data.length > 0) {
       const occurrences = data.map((occurrence) => ({
@@ -119,7 +119,7 @@ export const getOccurence = async (req, res) => {
         occurrence_type: occurrence.occurrence_type,
         km: occurrence.km,
         token: occurrence.token,
-        user_id: occurrence.user_id.name,
+        user_id: occurrence.user_id,
       }));
       res.status(200).json(occurrences);
     } else {
@@ -182,7 +182,7 @@ export const updateOcorrencia = async (req, res) => {
     }
 
     await ocorrencia.save();
-
+    console.log(ocorrencia);
     console.log("Ocorrência atualizada com sucesso");
     res.status(200).json({ message: "Ocorrência atualizada com sucesso" });
   } catch (error) {
