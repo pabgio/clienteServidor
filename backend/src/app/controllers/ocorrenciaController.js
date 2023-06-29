@@ -76,7 +76,7 @@ try {
     
     res.status(200).json(occurrences);
   } else {
-    res.status(201).json({ message: "Nenhuma ocorrência encontrada" });
+    res.status(201).json([]);
   }
 } catch (error) {
   res.status(500).json({ message: "Erro no servidor" });
@@ -110,7 +110,6 @@ export const getOccurence = async (req, res) => {
     const data = await Ocorrencia.find()
       .where("user_id")
       .equals({ _id: id });
-
     if (data.length > 0) {
       const occurrences = data.map((occurrence) => ({
         id: occurrence._id,
@@ -125,7 +124,7 @@ export const getOccurence = async (req, res) => {
     } else {
       res
         .status(200)
-        .json({ message: "Nenhuma ocorrência encontrada", occurrences: [] });
+        .json( [] );
     }
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });

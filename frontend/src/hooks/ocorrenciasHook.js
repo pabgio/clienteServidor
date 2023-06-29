@@ -151,6 +151,7 @@ const deletarOcorrencia = async (ocorrenciaId) => {
       // Sucesso na exclusão da ocorrência
       // Faça algo em resposta à exclusão bem-sucedida
       toast.success("Ocorrência excluída com sucesso");
+      router.push("home");
     } else {
       // Ocorreu um erro na exclusão da ocorrência
       const data = await response.json();
